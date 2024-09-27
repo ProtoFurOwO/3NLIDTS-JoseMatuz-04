@@ -41,20 +41,51 @@ namespace _3NLIDTS_JoseMatuz_04
                 genero = "mujer";
             }
 
-            string datos = $"Nombre: {nombres}\r\nApellidos: {apellidos}\r\nTelefono: {telefono}\r\nEstatura: {estatura}\r\nEdad: {edad}\r\nGenero: {genero}\r\n";
-
-            string RutaArchivo = "S:/TercerSemestreCodes/Datos.txt";
-
-            bool archivoexiste = File.Exists(RutaArchivo);
-            using (StreamWriter writer = new StreamWriter(RutaArchivo, true))
+            if (string.IsNullOrWhiteSpace(nombres))
             {
-                if (archivoexiste)
-                {
-                    writer.WriteLine(datos);
-                }
+                MessageBox.Show("Debes ingresar un nombre", "Nombre", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            else if (string.IsNullOrWhiteSpace(apellidos))
+            {
+                MessageBox.Show("Debes ingresar un apellido", "Apellidos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (!int.TryParse(edad, out int numero))
+            {
+                MessageBox.Show("Debes ingresar tu edad", "Edad", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (!float.TryParse(estatura, out float number))
+            {
+                MessageBox.Show("Debes ingresar tu estatura", "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (!long.TryParse(telefono, out long num))
+            {
+                MessageBox.Show("Debes ingresar un número celular valido", "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (telefono.Length != 10)
+            {
+                MessageBox.Show("Debes ingresar un número celular completo", "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (!rbhombre.Checked && !rbmujer.Checked)
+            {
+                MessageBox.Show("Debes seleccionar un género", "Información", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                string datos = $"Nombre: {nombres}\r\nApellidos: {apellidos}\r\nTelefono: {telefono}\r\nEstatura: {estatura}\r\nEdad: {edad}\r\nGenero: {genero}\r\n";
 
-            MessageBox.Show("Datos Guardados con Éxito\n\n" + datos, "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string RutaArchivo = "S:/TercerSemestreCodes/Datos.txt";
+
+                bool archivoexiste = File.Exists(RutaArchivo);
+                using (StreamWriter writer = new StreamWriter(RutaArchivo, true))
+                {
+                    if (archivoexiste)
+                    {
+                        writer.WriteLine(datos);
+                    }
+                }
+
+                MessageBox.Show("Datos Guardados con Éxito\n\n" + datos, "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
 
              
