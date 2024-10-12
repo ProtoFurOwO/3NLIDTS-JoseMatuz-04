@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
 
 namespace _3NLIDTS_JoseMatuz_04
 {
     public partial class Formulario : Form
     {
+        string SqlConnection = "Server=localhost; Port= 3306; Database=programacionavanzada;Uid=root;Pwd=Timeshirt#21";
         public Formulario()
         {
             InitializeComponent();
@@ -22,6 +25,28 @@ namespace _3NLIDTS_JoseMatuz_04
         {
 
         }
+
+        private void insertarRegistro(string nombres, string apellidos, int edad, decimal estatura, string telefono, string genero)
+        {
+            using (MySqlConnection connection = new MySqlConnection(SqlConnection))
+            {
+                connection.Open();
+                string insertQuery = "INSERT INTO registros (nombre, apellidos, telefono, estatura, edad, genero)" +
+                "VALUES (@nombre, @apellidos, @telefono, @estatura, @edad, @genero)";
+                using (MySqlCommand command = new MySqlCommand(insertQuery, connection))
+                {
+                    //command.Parameters.AddWithValue("@",);
+                    command.Parameters.AddWithValue("@Nombre", nombres);
+                    command.Parameters.AddWithValue("@Apellidos", apellidos);
+                    command.Parameters.AddWithValue("@Edad", edad);
+                    command.Parameters.AddWithValue("@Telefono", telefono);
+                    command.Parameters.AddWithValue("@Estatura", estatura);
+                    command.Parameters.AddWithValue("@Genero", genero);
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+        }   
 
         private void btnsave_Click(object sender, EventArgs e)
         {
@@ -81,6 +106,7 @@ namespace _3NLIDTS_JoseMatuz_04
                     if (archivoexiste)
                     {
                         writer.WriteLine(datos);
+                        insertarRegistro(nombres, apellidos, int.Parse(edad), decimal.Parse(estatura), telefono, genero);
                     }
                 }
 
